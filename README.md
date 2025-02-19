@@ -1,5 +1,6 @@
+# Task Hive
 <p align="center">
-TaskHiveBot is an intelligent chatbot designed to provide efficient and personalized assistance by creating a task management portfolio tailored to each user's needs. We focus on enhancing productivity through smart task organization, making every day more efficient.
+Task Hive is an intelligent chatbot designed to provide efficient and personalized assistance by creating a task management portfolio tailored to each user's needs. We focus on enhancing productivity through smart task organization, making every day more efficient.
 <br><br>
 <p align="center">
  <i>Authros: </i>

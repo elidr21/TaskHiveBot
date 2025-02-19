@@ -1,3 +1,15 @@
-# Task Hive
+![TaskHiveBot](https://raw.githubusercontent.com/Trilokia/Trilokia/379277808c61ef204768a61bbc5d25bc7798ccf1/trilokia.svg)
 
-##  Our product consists of an intelligent chatbot that provides efficient and personalized assistance by constructing a task management portfolio specific to user needs.
+<p align="center">
+TaskHiveBot is an intelligent chatbot designed to provide efficient and personalized assistance by creating a task management portfolio tailored to each user's needs. We focus on enhancing productivity through smart task organization, making every day more efficient.
+<br><br>
+<p align="center">
+ <i>Take a look at my repositories and let's get in touch!</i>
+<p align="center">
+<img src="https://visitor-badge.laobi.icu/badge?page_id=your-repo-name"/>
+</p>
+</p>
+
+![TaskHiveBot Bottom](https://raw.githubusercontent.com/Trilokia/Trilokia/379277808c61ef204768a61bbc5d25bc7798ccf1/bottom_header.svg)
+<br>
+</p>

@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request
+import os
+from flask import Flask, render_template, request, jsonify
 import openai
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__, static_folder="../static", template_folder="../frontend")
 
-openai.api_key = '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'
+# Windows: setx OPENAI_API_KEY "[actual_key]" 
+# Linux: 
+# MacOS: 
+openai.api_key = os.environ.get("OPENAI_API_KEY", "actual_api_key_here")
 
 
 @app.route("/")
@@ -13,20 +17,19 @@ def index():
 
 @app.route("/api", methods=["POST"])
 def api():
-    message = request.json.get("message")
+    user_message = request.json.get("message", "Write a haiku about recursion in programming.")
 
     completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         messages=[
-            {"role": "user", "content": message}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_message}
         ]
     )
-
-    if completion.choices[0].message is not None:
-        return {"content": completion.choices[0].message["content"]}
-    else:
-        return {'content': 'Failed to Generate response!'}
+    
+    response_text = completion.choices[0].message.get("content", "")
+    return jsonify({"content": response_text})
 
 
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True)

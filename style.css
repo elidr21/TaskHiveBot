@@ -1,0 +1,93 @@
+<style>
+  body {
+    background-color: #f1c40f; /* Bee yellow background */
+    color: #2c3e50; /* Dark gray text for contrast */
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+  }
+
+  .container {
+    max-width: 800px;
+    margin-top: 100px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+  }
+
+  .chat-box {
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f39c12; /* Yellow-orange background for chat */
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 3px solid #2c3e50; /* Bee-like black border */
+  }
+
+  .user-message, .bot-message {
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px 0;
+    max-width: 75%;
+    font-weight: bold;
+  }
+
+  .user-message {
+    background-color: #f39c12; /* Bee yellow */
+    color: black;
+    float: right;
+    text-align: right;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .bot-message {
+    background-color: #34495e; /* Dark gray for bot */
+    color: white;
+    float: left;
+    text-align: left;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .message-input {
+    background: #2c3e50; /* Dark gray */
+    color: white;
+    border-radius: 10px;
+    border: none;
+    resize: none;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .send-btn {
+    background-color: #f39c12; /* Bee yellow button */
+    color: #2c3e50; /* Dark text for the button */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .send-btn:hover {
+    background-color: #e67e22; /* Darker yellow-orange on hover */
+  }
+
+  .user-icon, .bot-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #2c3e50;
+  }
+</style>

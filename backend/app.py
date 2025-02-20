@@ -15,7 +15,7 @@ def index():
 
 @app.route("/api", methods=["POST"])
 def api():
-    user_message = request.json.get("message", "Write a haiku about recursion in programming.")
+    user_message = request.json.get("message")
 
     completion = openai.ChatCompletion.create(
         model="gpt-4o-mini",

@@ -1,203 +1,35 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Task Hive</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/lib/languages/python.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-
-  <style>
-    body {
-      background-color: #f1c40f; /* Bee yellow background */
-      color: #2c3e50; /* Dark gray text for contrast */
-      font-family: 'Arial', sans-serif;
-      height: 100vh;
-    }
-
-    .container {
-      max-width: 800px;
-      margin-top: 100px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #2c3e50;
-    }
-
-    .chat-box {
-      max-height: 400px;
-      overflow-y: auto;
-      background: #f39c12; /* Yellow-orange background for chat */
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      border: 3px solid #2c3e50; /* Bee-like black border */
-    }
-
-    .user-message, .bot-message {
-      border-radius: 20px;
-      padding: 10px;
-      margin: 5px 0;
-      max-width: 75%;
-      font-weight: bold;
-    }
-
-    .user-message {
-      background-color: #f39c12; /* Bee yellow */
-      color: black;
-      float: right;
-      text-align: right;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .bot-message {
-      background-color: #34495e; /* Dark gray for bot */
-      color: white;
-      float: left;
-      text-align: left;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .message-input {
-      background: #2c3e50; /* Dark gray */
-      color: white;
-      border-radius: 10px;
-      border: none;
-      resize: none;
-      width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-    }
-
-    .send-btn {
-      background-color: #f39c12; /* Bee yellow button */
-      color: #2c3e50; /* Dark text for the button */
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 10px;
-      width: 100%;
-    }
-
-    .send-btn:hover {
-      background-color: #e67e22; /* Darker yellow-orange on hover */
-    }
-
-    .user-icon, .bot-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      margin-right: 10px;
-      border: 2px solid #2c3e50;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Task Hive Chat</title>
+  <link rel="stylesheet" href="../static/style.css">
 </head>
-
 <body>
-  <div class="container">
-    <h1>HiveTask Chat Bot</h1>
-    <div class="chat-box">
-      <!-- Chat messages will be added here dynamically -->
-    </div>
-    <div class="form-group mt-3">
-      <textarea class="form-control message-input" rows="3" placeholder="Type your message here" id="message-input"></textarea>
-    </div>
-    <button type="button" class="btn send-btn" id="send-btn">Send</button>
+  <div class="chat-container">
+    <div id="chat-box">Welcome to Task Hive Chat!</div>
+    <input type="text" id="message-input" placeholder="Type your message..." />
+    <button id="send-btn">Send</button>
   </div>
 
   <script>
-    setInterval(highlightAll,1000);
+    document.getElementById('send-btn').addEventListener('click', async () => {
+      const input = document.getElementById('message-input');
+      const message = input.value;
+      input.value = '';
 
-    function highlightAll() {
-      document.querySelectorAll("pre code").forEach(block => {
-        hljs.highlightBlock(block);
+      // Make the API call
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
       });
-    }
-
-    const chatBox = document.querySelector(".chat-box");
-    const messageInput = document.querySelector("#message-input");
-    const sendBtn = document.querySelector("#send-btn");
-
-    function addMessage(message, isUserMessage) {
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("mt-3", "p-3", "rounded");
-
-      if (isUserMessage) {
-        messageDiv.classList.add("user-message");
-      } else {
-        messageDiv.classList.add("bot-message");
-      }
-
-      messageDiv.innerHTML = `
-        <img src="{{ url_for('static', filename='images/user.png') }}" class="user-icon"><p>${message}</p>
-      `;
-
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function sendMessage() {
-      const message = messageInput.value.trim();
-
-      if (message !== "") {
-        addMessage(message, true);
-
-        fetch("/api", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message })
-        })
-          .then(response => response.json())
-          .then(data => {
-            messageInput.value = "";
-            const messageDiv = document.createElement("div");
-            messageDiv.classList.add("mt-3", "p-3", "rounded");
-            messageDiv.classList.add("bot-message");
-
-            const content = data.content;
-
-            const hasCodeBlock = content.includes("```");
-            if (hasCodeBlock) {
-              const codeContent = content.replace(/```([\s\S]+?)```/g, '</p><pre><code>$1</code></pre><p>');
-              messageDiv.innerHTML = `<img src="{{ url_for('static', filename='images/gpt.jpg') }}" class="bot-icon"><p>${codeContent}</p>`;
-            } else {
-              messageDiv.innerHTML = `<img src="{{ url_for('static', filename='images/gpt.jpg') }}" class="bot-icon"><p>${content}</p>`;
-            }
-
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-          })
-          .catch(error => console.error(error));
-      }
-    }
-
-    sendBtn.addEventListener("click", sendMessage);
-    messageInput.addEventListener("keydown", event => {
-      if (event.keyCode === 13 && !event.shiftKey) {
-        event.preventDefault();
-        sendMessage();
-      }
+      const data = await response.json();
+      const chatBox = document.getElementById('chat-box');
+      // Append the conversation to the chat box
+      chatBox.innerHTML += `<div class="user">User: ${message}</div>
+                            <div class="bot">Bot: ${data.content}</div>`;
     });
   </script>
 </body>
-
 </html>

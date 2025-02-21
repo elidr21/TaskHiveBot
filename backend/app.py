@@ -20,7 +20,7 @@ def api():
     completion = openai.ChatCompletion.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are a helpful assistant named Beatrix."},
             {"role": "user", "content": user_message}
         ]
     )

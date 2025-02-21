@@ -7,9 +7,13 @@
 </head>
 <body>
   <div class="chat-container">
-    <div id="chat-box">Welcome to Task Hive Chat!</div>
-    <input type="text" id="message-input" placeholder="Type your message..." />
-    <button id="send-btn">Send</button>
+    <div id="chat-box" class="chat-box">
+      <p class="welcome">Welcome to Task Hive Chat!</p>
+    </div>
+    <div class="input-container">
+      <input type="text" id="message-input" placeholder="Type your message..." class="message-input" />
+      <button id="send-btn" class="send-btn">Send</button>
+    </div>
   </div>
 
   <script>
@@ -18,7 +22,6 @@
       const message = input.value;
       input.value = '';
 
-      // Make the API call
       const response = await fetch('/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -26,9 +29,9 @@
       });
       const data = await response.json();
       const chatBox = document.getElementById('chat-box');
-      // Append the conversation to the chat box
       chatBox.innerHTML += `<div class="user">User: ${message}</div>
-                            <div class="bot">Bot: ${data.content}</div>`;
+                            <div class="bot">Beatrix: ${data.content}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
     });
   </script>
 </body>

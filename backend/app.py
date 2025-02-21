@@ -5,7 +5,7 @@ import openai
 app = Flask(__name__, static_folder="../static", template_folder="../frontend")
 
 # Set your API key from an environment variable
-openai.api_key = os.environ.get("OPENAI_API_KEY", "actual_api_key_here")
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 @app.route("/")

@@ -1,37 +1,214 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Task Hive Chat</title>
-  <link rel="stylesheet" href="../static/style.css">
+  <link rel="stylesheet" href="../static/style.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="chat-container">
-    <div id="chat-box" class="chat-box">
-      <p class="welcome">Welcome to Task Hive Chat!</p>
-    </div>
-    <div class="input-container">
-      <input type="text" id="message-input" placeholder="Type your message..." class="message-input" />
-      <button id="send-btn" class="send-btn">Send</button>
+  <div class="app-container">
+    <!-- Sidebar for Calendar -->
+    <aside class="sidebar">
+      <section id="calendar-section">
+        <h2>Your Task Calendar</h2>
+        <div id="calendar"></div>
+      </section>
+    </aside>
+    
+    <!-- Chat Container -->
+    <div class="chat-container">
+      <header class="chat-header">
+        <div class="logo">
+          <svg class="bee-logo" viewBox="0 0 100 100" width="32" height="32">
+            <ellipse cx="50" cy="50" rx="40" ry="30" fill="#FFC107" />
+            <ellipse cx="50" cy="30" rx="25" ry="20" fill="#FFC107" />
+            <rect x="40" y="30" width="20" height="40" fill="#000000" />
+            <rect x="30" y="40" width="40" height="5" fill="#000000" />
+            <rect x="30" y="55" width="40" height="5" fill="#000000" />
+            <circle cx="30" cy="25" r="10" fill="transparent" stroke="#000000" stroke-width="2" />
+            <circle cx="70" cy="25" r="10" fill="transparent" stroke="#000000" stroke-width="2" />
+            <circle cx="30" cy="25" r="3" fill="#000000" />
+            <circle cx="70" cy="25" r="3" fill="#000000" />
+          </svg>
+        </div>
+        <h1>Task Hive Chat</h1>
+      </header>
+      
+      <main id="chat-box" class="chat-box">
+        <div class="message bot-message">
+          <div class="avatar bee-avatar"></div>
+          <div class="message-content">
+            <p>Bzz! I'm Beatrix. How can I help you today?</p>
+            <span class="timestamp">Now</span>
+          </div>
+        </div>
+      </main>
+      
+      <footer class="chat-footer">
+        <input type="text" id="message-input" placeholder="Type your message here..." class="message-input" />
+        <button id="send-btn" class="send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </footer>
     </div>
   </div>
-
+  
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.js"></script>
+  
   <script>
-    document.getElementById('send-btn').addEventListener('click', async () => {
-      const input = document.getElementById('message-input');
-      const message = input.value;
-      input.value = '';
-
-      const response = await fetch('/api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
-      });
-      const data = await response.json();
+    document.addEventListener('DOMContentLoaded', () => {
+      // Chat functionality
+      const messageInput = document.getElementById('message-input');
+      const sendBtn = document.getElementById('send-btn');
       const chatBox = document.getElementById('chat-box');
-      chatBox.innerHTML += `<div class="user">User: ${message}</div>
-                            <div class="bot">Beatrix: ${data.content}</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
+
+      function addMessage(message, sender) {
+        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        const avatarHTML = sender === 'user'
+          ? '<div class="avatar user-avatar"><i class="fas fa-user"></i></div>'
+          : '<div class="avatar bee-avatar"></div>';
+        messageDiv.innerHTML = `
+          ${avatarHTML}
+          <div class="message-content">
+            <p>${message}</p>
+            <span class="timestamp">${timestamp}</span>
+          </div>
+        `;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+        addMessage(message, 'user');
+        messageInput.value = '';
+        
+        // Typing indicator
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot-message typing';
+        typingDiv.innerHTML = `
+          <div class="avatar bee-avatar"></div>
+          <div class="message-content">
+            <p><span class="typing-indicator">•••</span></p>
+          </div>
+        `;
+        chatBox.appendChild(typingDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        try {
+          const response = await fetch('/api', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: message })
+          });
+          const data = await response.json();
+          chatBox.removeChild(typingDiv);
+          addMessage(data.content, 'bot');
+        } catch (error) {
+          chatBox.removeChild(typingDiv);
+          addMessage("Bzz! I'm having trouble connecting.", 'bot');
+          console.error('Error:', error);
+        }
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+
+      // Initialize FullCalendar in the sidebar
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        selectable: true,
+        editable: true,
+        events: '/tasks', // Load events from the backend
+        dateClick: function(info) {
+          let title = prompt('Enter Task Title for ' + info.dateStr + ':');
+          if (title) {
+            fetch('/tasks', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ title: title, start: info.dateStr, allDay: true })
+            })
+            .then(response => response.json())
+            .then(newTask => {
+              calendar.addEvent(newTask);
+            })
+            .catch(error => {
+              alert("Error adding task: " + error);
+              console.error(error);
+            });
+          }
+        },
+        eventClick: function(info) {
+          let action = prompt('Enter "u" to update or "r" to remove this task. Leave blank to cancel:');
+          if (action === 'r') {
+            if (confirm('Are you sure you want to delete this task?')) {
+              fetch('/tasks/' + info.event.id, {
+                method: 'DELETE'
+              })
+              .then(response => response.json())
+              .then(result => {
+                info.event.remove();
+              })
+              .catch(error => {
+                alert("Error deleting task: " + error);
+                console.error(error);
+              });
+            }
+          } else if (action === 'u') {
+            let newTitle = prompt('Enter the new task title:', info.event.title);
+            if (newTitle) {
+              fetch('/tasks/' + info.event.id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: newTitle })
+              })
+              .then(response => response.json())
+              .then(updatedTask => {
+                info.event.setProp('title', updatedTask.title);
+              })
+              .catch(error => {
+                alert("Error updating task: " + error);
+                console.error(error);
+              });
+            }
+          }
+        },
+        eventDrop: function(info) {
+          if (!confirm("Confirm change of task date?")) {
+            info.revert();
+          } else {
+            fetch('/tasks/' + info.event.id, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ start: info.event.start.toISOString().split('T')[0] })
+            })
+            .then(response => response.json())
+            .catch(error => {
+              alert("Error updating task date: " + error);
+              info.revert();
+              console.error(error);
+            });
+          }
+        }
+      });
+      calendar.render();
     });
   </script>
 </body>

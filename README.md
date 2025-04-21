@@ -30,43 +30,6 @@ The first build can take a minute while images are pulled & dependencies are ins
 
 ---
 
-## 🔧 Configuration
-
-Copy the example env file and tweak values as needed:
-
-```bash
-cp .env.example .env
-```
-
-| Variable              | Description                              | Default |
-|-----------------------|------------------------------------------|---------|
-| `OPENAI_API_KEY`      | Azure OpenAI key                         | *none*  |
-| `DATABASE_URL`        | PostgreSQL connection string             | `postgres://taskhive:taskhive@db:5432/taskhive` |
-| `JWT_SECRET`          | Secret used to sign auth tokens          | change‑me |
-| `REACT_APP_API_HOST`  | Backend base URL visible to the browser  | `http://localhost:8000` |
-
----
-
-## 🖥️ Local Development
-
-```bash
-# Run backend & database only
-$ docker-compose up backend db
-
-# Hot‑reload frontend separately
-$ npm --prefix frontend install
-$ npm --prefix frontend start
-```
-
-Tests are written with **PyTest** (backend) and **Vitest** (frontend):
-
-```bash
-$ docker-compose exec backend pytest
-$ npm --prefix frontend test
-```
-
----
-
 ## 📁 Folder Structure
 
 ```

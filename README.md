@@ -35,10 +35,10 @@ The first build can take a minute while images are pulled & dependencies are ins
 ```
 TaskHiveBot/
 ├─ backend/            # Flask application
-│  ├─ app/             # Blueprint modules & services
+│  ├─ app/             
 │  ├─ tests/
 │  └─ Dockerfile
-├─ frontend/           # React SPA (Vite)
+├─ frontend/           # HTML & CSS
 │  ├─ src/
 │  ├─ public/
 │  └─ Dockerfile

@@ -1,6 +1,6 @@
 # TaskHiveBot 🐝
 
-> **Smart task management with a dash of gamification — powered by Flask, React, PostgreSQL & Azure OpenAI.**
+> **Smart task management with gamification features — powered by Flask, React, PostgreSQL & Azure OpenAI.**
 
 ## ✨ Features
 

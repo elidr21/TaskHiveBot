@@ -6,7 +6,6 @@
 
 - **Conversational task management** — natural‑language creation, updates & queries
 - **Gamification** — XP, streaks & leaderboards to keep productivity fun
-- **Cross‑device** — responsive React SPA works great on desktop & mobile
 - **Secure & scalable** — Dockerised micro‑services, PostgreSQL database, JWT auth
 - **Cloud‑ready** — deploys in a single command to Microsoft Azure or any Docker host
 

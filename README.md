@@ -49,17 +49,6 @@ TaskHiveBot/
 
 ---
 
-## 🤝 Contributing
-
-1. **Fork** this repo & create your branch: `git checkout -b feat/amazing`  
-2. **Commit** your changes: `git commit -m "feat: add amazing thing"`  
-3. **Push** and open a PR.  
-4. ⭐ Give us a star if you like the project!
-
-> Run `pre-commit install` to enable linting hooks (Black, isort, Flake8, ESLint, Prettier).
-
----
-
 ## 📜 License
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.

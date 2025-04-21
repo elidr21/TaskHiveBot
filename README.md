@@ -55,4 +55,4 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more informa
 
 ---
 
-> © 2025 Elizandro Duran & TaskHiveBot Contributors — *Made with ☕ in Colorado Springs*
+> © 2025 Elizandro Duran, Drew Houchens, Bryan Hancock, Alexis Liew — *Made with ☕ in Colorado Springs*

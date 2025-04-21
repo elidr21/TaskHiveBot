@@ -2,68 +2,397 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Hive Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Hive Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- FontAwesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="../static/style.css" />
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <!-- FullCalendar CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar for Calendar -->
-    <aside class="sidebar">
-      <section id="calendar-section">
-        <h2>Your Task Calendar</h2>
-        <div id="calendar"></div>
-      </section>
-    </aside>
-    
-    <!-- Chat Container -->
-    <div class="chat-container">
-      <header class="chat-header">
-        <div class="logo">
-          <svg class="bee-logo" viewBox="0 0 100 100" width="32" height="32">
-            <ellipse cx="50" cy="50" rx="40" ry="30" fill="#FFC107" />
-            <ellipse cx="50" cy="30" rx="25" ry="20" fill="#FFC107" />
-            <rect x="40" y="30" width="20" height="40" fill="#000000" />
-            <rect x="30" y="40" width="40" height="5" fill="#000000" />
-            <rect x="30" y="55" width="40" height="5" fill="#000000" />
-            <circle cx="30" cy="25" r="10" fill="transparent" stroke="#000000" stroke-width="2" />
-            <circle cx="70" cy="25" r="10" fill="transparent" stroke="#000000" stroke-width="2" />
-            <circle cx="30" cy="25" r="3" fill="#000000" />
-            <circle cx="70" cy="25" r="3" fill="#000000" />
-          </svg>
-        </div>
-        <h1>Task Hive Chat</h1>
-      </header>
-      
-      <main id="chat-box" class="chat-box">
-        <div class="message bot-message">
-          <div class="avatar bee-avatar"></div>
-          <div class="message-content">
-            <p>Bzz! I'm Beatrix. How can I help you today?</p>
-            <span class="timestamp">Now</span>
-          </div>
-        </div>
-      </main>
-      
-      <footer class="chat-footer">
-        <input type="text" id="message-input" placeholder="Type your message here..." class="message-input" />
-        <button id="send-btn" class="send-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </footer>
+  <!-- TOP NAVBAR -->
+  <header class="top-nav">
+    <div class="logo-section">
+      <!-- Logo -->
+      <div class="logo-icon">
+        <i class="fas fa-bee"></i> <!-- Replace or remove if you'd rather not have a bee icon -->
+      </div>
+      <span class="brand-text">Task Hive</span>
     </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search"/>
+      <button>
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+
+    <div class="user-section">
+      <button class="notif-btn">
+        <i class="fas fa-bell"></i>
+      </button>
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <span class="username">Username</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER: Sidebar + Content -->
+  <div class="main-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <!-- Navigation Menu -->
+      <nav class="menu">
+        <ul class="menu-list">
+          <li class="menu-title">Menu</li>
+          <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fas fa-gift"></i> Rewards</a></li>
+          <li><a href="#"><i class="fas fa-list"></i> Previous Task Lists</a></li>
+        </ul>
+        <ul class="menu-list">
+          <li class="menu-title">Others</li>
+          <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+        </ul>
+      </nav>
+
+      <!-- Tools Panel (Calendar + To-Do) -->
+      <div class="tools-panel">
+        <div class="tools-header">
+          <span>My Tools</span>
+          <button id="tools-toggle">
+            <i class="fas fa-chevron-up"></i>
+          </button>
+        </div>
+
+        <div id="tools-content" class="tools-content">
+          <!-- CALENDAR -->
+          <section class="calendar-section">
+            <div class="calendar-header">
+              <button id="prev-month" class="month-nav"><i class="fas fa-chevron-left"></i></button>
+              <div class="calendar-title" id="calendar-title"></div>
+              <button id="next-month" class="month-nav"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+          </section>
+
+          <!-- TASK LIST -->
+          <section class="task-section">
+            <h2>To-Do List</h2>
+            <div class="task-input-wrapper">
+              <input type="text" id="task-input" placeholder="New task..." />
+              <button id="task-add-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="task-list"></ul>
+          </section>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+      <div class="content-header">
+        <h1>Dashboard</h1>
+        <p>Welcome to your Task Hive dashboard!</p>
+      </div>
+
+      <div class="content-body">
+        <h2 style="margin-top: 2rem;">Need Help?</h2>
+        <p>Open the chat to speak with Beatrix, or start adding tasks under “My Tools”.</p>
+      </div>
+    </main>
   </div>
-  
-  <!-- FullCalendar JS -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.js"></script>
-  
+
+  <!-- FLOATING CHAT BUTTON -->
+  <button id="chat-floating-btn" class="chat-floating-btn">
+    <i class="fas fa-comments"></i>
+  </button>
+
+  <!-- CHAT PANEL (INITIALLY HIDDEN) -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-panel-header">
+      <h3>Beatrix</h3>
+      <button id="close-chat-panel">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="chat-box" id="chat-box">
+      <!-- Initial Bot Message -->
+      <div class="message bot-message">
+        <div class="avatar bot-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="message-content">
+          <p>Hello! I’m Beatrix, your AI assistant. How can I help?</p>
+          <span class="timestamp">Now</span>
+        </div>
+      </div>
+    </div>
+    <footer class="chat-footer">
+      <input type="text" id="message-input" placeholder="Type your message..." class="message-input"/>
+      <button id="send-btn" class="send-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </footer>
+  </div>
+
+  <!-- MAIN SCRIPT -->
   <script>
+    /* ---------------------------
+       Collapsible Tools Panel 
+    --------------------------- */
+    const toolsToggleBtn = document.getElementById("tools-toggle");
+    const toolsContent = document.getElementById("tools-content");
+    let toolsOpen = true;
+    toolsToggleBtn.addEventListener("click", () => {
+      toolsOpen = !toolsOpen;
+      toolsContent.style.display = toolsOpen ? "block" : "none";
+      toolsToggleBtn.innerHTML = toolsOpen
+        ? '<i class="fas fa-chevron-up"></i>'
+        : '<i class="fas fa-chevron-down"></i>';
+    });
+
+    /* ---------------------------
+       Calendar Setup
+    --------------------------- */
+    let currentDate = new Date();
+
     document.addEventListener('DOMContentLoaded', () => {
-      // Chat functionality
+      initCalendar();
+      initTasks();
+      initChat();
+    });
+
+    function initCalendar() {
+      const prevBtn = document.getElementById('prev-month');
+      const nextBtn = document.getElementById('next-month');
+
+      prevBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+      });
+
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const calendarTitle = document.getElementById('calendar-title');
+      const calendarGrid = document.getElementById('calendar-grid');
+
+      calendarGrid.innerHTML = '';
+
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      // Title e.g. "April 2025"
+      const options = { month: 'long', year: 'numeric' };
+      calendarTitle.textContent = currentDate.toLocaleDateString('en-US', options);
+
+      const firstDayOfMonth = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Empty cells for days before first day
+      for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.classList.add('day-cell', 'empty-cell');
+        calendarGrid.appendChild(emptyCell);
+      }
+
+      // Cells for each day in the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.classList.add('day-cell');
+        dayCell.textContent = day;
+
+        if (isCurrentDay(year, month, day)) {
+          dayCell.classList.add('today-cell');
+        }
+
+        calendarGrid.appendChild(dayCell);
+      }
+    }
+
+    function isCurrentDay(year, month, day) {
+      const now = new Date();
+      return (
+        year === now.getFullYear() &&
+        month === now.getMonth() &&
+        day === now.getDate()
+      );
+    }
+
+    /* ---------------------------
+       To-Do List
+    --------------------------- */
+    function initTasks() {
+      const taskInput = document.getElementById('task-input');
+      const taskAddBtn = document.getElementById('task-add-btn');
+
+      // Add a new task (through the UI)
+      taskAddBtn.addEventListener('click', () => {
+        const newTask = taskInput.value.trim();
+        if (!newTask) return;
+        sendTaskUpdateMessage(`Add task: ${newTask}`);
+        taskInput.value = '';
+      });
+    }
+
+    function refreshTaskList(tasks) {
+      const taskListEl = document.getElementById('task-list');
+      taskListEl.innerHTML = '';
+
+      tasks.forEach((t) => {
+        const li = document.createElement('li');
+        li.className = 'task-item';
+
+        const label = document.createElement('label');
+        label.innerText = t.name;
+        if (t.completed) {
+          label.classList.add('task-completed');
+        }
+
+        // Complete button
+        const completeBtn = document.createElement('button');
+        completeBtn.className = 'task-complete-btn';
+        completeBtn.innerHTML = '<i class="fas fa-check"></i>';
+        completeBtn.title = 'Mark task as complete';
+        completeBtn.addEventListener('click', () => {
+          sendTaskUpdateMessage(`Complete task: ${t.name}`);
+        });
+
+        // Remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'task-remove-btn';
+        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        removeBtn.title = 'Remove task';
+        removeBtn.addEventListener('click', () => {
+          sendTaskUpdateMessage(`Remove task: ${t.name}`);
+        });
+
+        li.appendChild(label);
+        li.appendChild(completeBtn);
+        li.appendChild(removeBtn);
+        taskListEl.appendChild(li);
+      });
+    }
+
+    /* 
+      Utility to send task commands to the server 
+      as if typed in chat, so the logic is unified.
+    */
+    async function sendTaskUpdateMessage(commandString) {
+      const chatBox = document.getElementById('chat-box');
+      
+      // Show the command as a user message bubble in the chat
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'message user-message';
+      userMsgDiv.innerHTML = `
+        <div class="avatar user-avatar"><i class="fas fa-user"></i></div>
+        <div class="message-content">
+          <p>${commandString}</p>
+          <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        </div>
+      `;
+      chatBox.appendChild(userMsgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Typing indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'message bot-message typing';
+      typingDiv.innerHTML = `
+        <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="message-content">
+          <p><span class="typing-indicator">•••</span></p>
+        </div>
+      `;
+      chatBox.appendChild(typingDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const response = await fetch('/api', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: commandString })
+        });
+        const data = await response.json();
+        chatBox.removeChild(typingDiv);
+
+        // Bot's response
+        const botMsgDiv = document.createElement('div');
+        botMsgDiv.className = 'message bot-message';
+        botMsgDiv.innerHTML = `
+          <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+          <div class="message-content">
+            <p>${data.content}</p>
+            <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+        `;
+        chatBox.appendChild(botMsgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Refresh the to-do list in the UI
+        if (data.tasks) {
+          refreshTaskList(data.tasks);
+        }
+      } catch (error) {
+        chatBox.removeChild(typingDiv);
+        console.error('Error:', error);
+
+        // Error bubble
+        const botMsgDiv = document.createElement('div');
+        botMsgDiv.className = 'message bot-message';
+        botMsgDiv.innerHTML = `
+          <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
+          <div class="message-content">
+            <p>Something went wrong. Please try again.</p>
+            <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+        `;
+        chatBox.appendChild(botMsgDiv);
+      }
+    }
+
+    /* ---------------------------
+       Floating Chat Functionality
+    --------------------------- */
+    function initChat() {
+      const chatFloatingBtn = document.getElementById('chat-floating-btn');
+      const chatPanel = document.getElementById('chat-panel');
+      const closeChatPanelBtn = document.getElementById('close-chat-panel');
+
+      // Open panel
+      chatFloatingBtn.addEventListener('click', () => {
+        chatPanel.classList.add('open');
+      });
+
+      // Close panel
+      closeChatPanelBtn.addEventListener('click', () => {
+        chatPanel.classList.remove('open');
+      });
+
+      // Chat sending logic
       const messageInput = document.getElementById('message-input');
       const sendBtn = document.getElementById('send-btn');
       const chatBox = document.getElementById('chat-box');
@@ -72,9 +401,11 @@
         const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
+        
         const avatarHTML = sender === 'user'
           ? '<div class="avatar user-avatar"><i class="fas fa-user"></i></div>'
-          : '<div class="avatar bee-avatar"></div>';
+          : '<div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>';
+        
         messageDiv.innerHTML = `
           ${avatarHTML}
           <div class="message-content">
@@ -91,125 +422,47 @@
         if (!message) return;
         addMessage(message, 'user');
         messageInput.value = '';
-        
+
         // Typing indicator
         const typingDiv = document.createElement('div');
         typingDiv.className = 'message bot-message typing';
         typingDiv.innerHTML = `
-          <div class="avatar bee-avatar"></div>
+          <div class="avatar bot-avatar"><i class="fas fa-robot"></i></div>
           <div class="message-content">
             <p><span class="typing-indicator">•••</span></p>
           </div>
         `;
         chatBox.appendChild(typingDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
-        
+
         try {
           const response = await fetch('/api', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify({ message })
           });
           const data = await response.json();
           chatBox.removeChild(typingDiv);
           addMessage(data.content, 'bot');
+
+          // Update tasks if any changes
+          if (data.tasks) {
+            refreshTaskList(data.tasks);
+          }
         } catch (error) {
           chatBox.removeChild(typingDiv);
-          addMessage("Bzz! I'm having trouble connecting.", 'bot');
+          addMessage("I'm having trouble connecting. Please try again.", 'bot');
           console.error('Error:', error);
         }
       }
 
       sendBtn.addEventListener('click', sendMessage);
       messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-      });
-
-      // Initialize FullCalendar in the sidebar
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        selectable: true,
-        editable: true,
-        events: '/tasks', // Load events from the backend
-        dateClick: function(info) {
-          let title = prompt('Enter Task Title for ' + info.dateStr + ':');
-          if (title) {
-            fetch('/tasks', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ title: title, start: info.dateStr, allDay: true })
-            })
-            .then(response => response.json())
-            .then(newTask => {
-              calendar.addEvent(newTask);
-            })
-            .catch(error => {
-              alert("Error adding task: " + error);
-              console.error(error);
-            });
-          }
-        },
-        eventClick: function(info) {
-          let action = prompt('Enter "u" to update or "r" to remove this task. Leave blank to cancel:');
-          if (action === 'r') {
-            if (confirm('Are you sure you want to delete this task?')) {
-              fetch('/tasks/' + info.event.id, {
-                method: 'DELETE'
-              })
-              .then(response => response.json())
-              .then(result => {
-                info.event.remove();
-              })
-              .catch(error => {
-                alert("Error deleting task: " + error);
-                console.error(error);
-              });
-            }
-          } else if (action === 'u') {
-            let newTitle = prompt('Enter the new task title:', info.event.title);
-            if (newTitle) {
-              fetch('/tasks/' + info.event.id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: newTitle })
-              })
-              .then(response => response.json())
-              .then(updatedTask => {
-                info.event.setProp('title', updatedTask.title);
-              })
-              .catch(error => {
-                alert("Error updating task: " + error);
-                console.error(error);
-              });
-            }
-          }
-        },
-        eventDrop: function(info) {
-          if (!confirm("Confirm change of task date?")) {
-            info.revert();
-          } else {
-            fetch('/tasks/' + info.event.id, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ start: info.event.start.toISOString().split('T')[0] })
-            })
-            .then(response => response.json())
-            .catch(error => {
-              alert("Error updating task date: " + error);
-              info.revert();
-              console.error(error);
-            });
-          }
+        if (e.key === 'Enter') {
+          sendMessage();
         }
       });
-      calendar.render();
-    });
+    }
   </script>
 </body>
 </html>

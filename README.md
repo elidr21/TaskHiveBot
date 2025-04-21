@@ -2,15 +2,6 @@
 
 > **Smart task management with a dash of gamification — powered by Flask, React, PostgreSQL & Azure OpenAI.**
 
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/elidr/TaskHiveBot/actions) 
-[![Docker Pulls](https://img.shields.io/docker/pulls/elidr/taskhivebot.svg)](https://hub.docker.com/r/elidr/taskhivebot) 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-![TaskHiveBot UI](docs/assets/screenshot-light.png#gh-light-mode-only)
-![TaskHiveBot UI – dark](docs/assets/screenshot-dark.png#gh-dark-mode-only)
-
----
-
 ## ✨ Features
 
 - **Conversational task management** — natural‑language creation, updates & queries

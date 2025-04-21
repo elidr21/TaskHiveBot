@@ -10,26 +10,6 @@
 - **Secure & scalable** — Dockerised micro‑services, PostgreSQL database, JWT auth
 - **Cloud‑ready** — deploys in a single command to Microsoft Azure or any Docker host
 
-## 🗺️ Architecture
-
-```mermaid
-flowchart TB
-  subgraph Frontend
-    A[React SPA]
-  end
-  subgraph Backend
-    B[Flask API]\n(REST + WebSocket)
-    C[Task Engine]\n(Gamification Logic)
-  end
-  D[(PostgreSQL)]
-  E[[Azure OpenAI]]
-
-  A <--> |HTTPS| B
-  B --> C
-  C -- SQL --> D
-  B -- Prompt/Completion --> E
-```
-
 ---
 
 ## ⚡ Quick Start
@@ -44,7 +24,7 @@ $ cd TaskHiveBot
 # 2️⃣ Spin everything up
 $ docker-compose up --build
 
-# ⏱️ Then visit http://localhost:3000 in your browser.
+# ⏱️ Then visit http://localhost:5000 in your browser.
 ```
 
 The first build can take a minute while images are pulled & dependencies are installed.

@@ -22,6 +22,13 @@
   <link rel="stylesheet" href="../static/style.css" />
 </head>
 <body>
+  <nav class="top-nav">
+    <a href="/" class="home-link">
+      <i class="fas fa-home"></i>
+      Back to Home
+    </a>
+  </nav>
+
   <div class="app-container">
     <!-- SIDE PANEL -->
     <div class="side-panel" id="side-panel">
@@ -59,6 +66,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Move the reopen button here, outside the side panel -->
+    <button class="panel-reopen-btn" id="reopen-panel">
+      <i class="fas fa-chevron-right"></i>
+    </button>
 
     <!-- CHAT CONTAINER -->
     <div class="chat-container">
@@ -182,25 +194,66 @@
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
         
-        const timestamp = new Date().toLocaleTimeString([], { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        });
-
-        const avatarIcon = sender === 'user' ? 'fa-user' : 'fa-robot';
-        
         messageDiv.innerHTML = `
           <div class="avatar">
-            <i class="fas ${avatarIcon}"></i>
+            <i class="fas ${sender === 'user' ? 'fa-user' : 'fa-robot'}"></i>
           </div>
           <div class="message-content">
-            <p>${message}</p>
-            <span class="timestamp">${timestamp}</span>
+            <div class="message-text">
+              <p>${message}</p>
+            </div>
+            <div class="message-footer">
+              <span class="timestamp">${new Date().toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}</span>
+              ${sender === 'bot' ? `
+                <div class="message-actions">
+                  <button class="action-btn copy-btn" aria-label="Copy message">
+                    <i class="fas fa-copy"></i>
+                  </button>
+                  <button class="action-btn react-btn" aria-label="React to message">
+                    <i class="fas fa-smile"></i>
+                  </button>
+                </div>
+              ` : ''}
+            </div>
           </div>
         `;
 
+        // Add copy functionality
+        const copyBtn = messageDiv.querySelector('.copy-btn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(message);
+            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+              copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 2000);
+          });
+        }
+
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Update typing indicator
+      function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot-message typing';
+        typingDiv.innerHTML = `
+          <div class="avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="message-content">
+            <div class="typing-indicator">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+        `;
+        return typingDiv;
       }
 
       // Send message
@@ -213,16 +266,7 @@
         messageInput.value = '';
 
         // Show typing indicator
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'message bot-message typing';
-        typingDiv.innerHTML = `
-          <div class="avatar">
-            <i class="fas fa-robot"></i>
-          </div>
-          <div class="message-content">
-            <p><span class="typing-indicator">•••</span></p>
-          </div>
-        `;
+        const typingDiv = showTypingIndicator();
         chatMessages.appendChild(typingDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -279,10 +323,15 @@
 
       // Side panel toggle
       togglePanel.addEventListener('click', () => {
-        sidePanel.classList.toggle('collapsed');
-        togglePanel.innerHTML = sidePanel.classList.contains('collapsed')
-          ? '<i class="fas fa-chevron-left"></i>'
-          : '<i class="fas fa-chevron-right"></i>';
+        sidePanel.classList.add('collapsed');
+        togglePanel.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      });
+
+      // Reopen panel
+      const reopenButton = document.getElementById('reopen-panel');
+      reopenButton.addEventListener('click', () => {
+        sidePanel.classList.remove('collapsed');
+        togglePanel.innerHTML = '<i class="fas fa-chevron-left"></i>';
       });
 
       // Filter buttons
@@ -305,4 +354,3 @@
   </script>
 </body>
 </html>
-

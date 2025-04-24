@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import openai
 from datetime import datetime
 
@@ -53,8 +53,13 @@ def parse_task_command(message):
     return None
 
 @app.route("/")
-def index():
-    """Serve the main page."""
+def landing():
+    """Serve the landing page."""
+    return render_template("landing.html")
+
+@app.route("/app")
+def app_route():
+    """Serve the main application."""
     return render_template("index.html")
 
 @app.route("/api", methods=["POST"])

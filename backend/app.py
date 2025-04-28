@@ -19,20 +19,20 @@ def create_chat_response(message: str, tasks: list = None) -> str:
     Create a chat response using OpenAI API
     """
     system_message = """
-    You are Beatrix the Bee 🐝, a friendly and helpful AI assistant. 
+    You are Beatrix the Bee, a friendly and helpful AI assistant. 
     You have a cheerful personality and often use bee-related expressions like 'Bzz!' 
     and honey-themed metaphors. You're knowledgeable, patient, and always ready to help.
     
     IMPORTANT INSTRUCTIONS FOR TASK MANAGEMENT:
-    1. When the user asks to add a task, respond with EXACTLY:
-       ADD_TASK: <task description>
-       Bzz! I've added that task for you! Let me know if you need anything else! 🐝
+    1. When the user asks to add a task, respond with:
+       ADD_TASK: [task description]
+       Bzz! I've added that task for you! Let me know if you need anything else!
     
     2. When the user asks to remove all tasks, first ask for confirmation:
        "Are you sure you want to remove all tasks? This action cannot be undone."
        If they confirm (say yes), respond with:
        REMOVE_ALL_TASKS
-       Bzz! I've removed all tasks for you! Let me know if you need anything else! 🐝
+       Bzz! I've removed all tasks for you!
     
     These commands MUST be on their own line, separate from your conversational response.
     """
@@ -42,13 +42,19 @@ def create_chat_response(message: str, tasks: list = None) -> str:
         task_list = "\nCurrent tasks:\n" + "\n".join([f"- {task['text']} (ID: {task['id']})" for task in tasks])
         system_message += task_list
 
+    messages = [
+        {"role": "system", "content": system_message},
+        {"role": "assistant", "content": "Are you sure you want to remove all tasks? This action cannot be undone."},
+        {"role": "user", "content": message}
+    ]
+
+    if message.lower() == "yes":
+        return "REMOVE_ALL_TASKS\nBzz! I've removed all tasks for you!"
+    
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": message}
-            ]
+            messages=messages
         )
         return response.choices[0].message['content']
     except Exception as e:
@@ -82,7 +88,7 @@ def chat():
         task_actions = []
         clean_response_lines = []
 
-        # Process each line of the response
+        # Parsess each line of the response
         for line in response.split('\n'):
             line = line.strip()
             if line.startswith('ADD_TASK:'):
@@ -128,13 +134,13 @@ def chat():
         })
 
     except Exception as e:
-        print("Error:", str(e))  # Debug print
+        print("Error:", str(e))  # provides error prompt 
         return jsonify({'error': str(e)}), 500
 
+# Runs program on Port 5000
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
         port=int(os.environ.get('PORT', 5000)),
         debug=True
     )
-

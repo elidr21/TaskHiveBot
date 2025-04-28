@@ -38,7 +38,7 @@ The first build can take a minute while images are pulled & dependencies are ins
 ```
 TaskHiveBot/
 ├── backend/
-│   ├── app.py          # Main Flask application
+│   ├── app.py          # Flask Application
 │   └── Dockerfile 
 ├── frontend/
 │   └── static/

@@ -73,7 +73,7 @@ class ChatInterface {
     }
 }
 
-// Initialize chat interface when DOM is loaded
+// Initialize chat interface when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.chatInterface = new ChatInterface();
 }); 

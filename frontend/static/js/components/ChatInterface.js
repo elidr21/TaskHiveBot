@@ -76,10 +76,10 @@ export class ChatInterface {
                 throw new Error(data.error || `HTTP error! status: ${response.status}`);
             }
 
-            // Add AI response to chat
+            // Adds AI responses to the chat
             this.addMessage('ai', data.response);
 
-            // Handle task actions
+            // Handle the task actions
             if (data.taskActions && data.taskActions.length > 0) {
                 data.taskActions.forEach(action => {
                     switch (action.type) {
@@ -121,7 +121,7 @@ export class ChatInterface {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}-message`;
         
-        // Handle emojis and formatting
+        // Handle the respective emojis and formatting
         const formattedContent = content
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -130,7 +130,7 @@ export class ChatInterface {
         messageDiv.innerHTML = formattedContent;
         this.chatMessages.appendChild(messageDiv);
 
-        // Always force scroll to bottom for system messages (task updates)
+        // Always force scroll to bottom for system messages (task updates) # Not best Practice
         if (type === 'system') {
             this.forceScrollToBottom();
         } else if (this.isNearBottom) {
@@ -146,6 +146,7 @@ export class ChatInterface {
             ':x:': '❌',
             ':star:': '⭐',
             // Add more emoji mappings as needed
+            // added for user experience
         };
         return emojiMap[match] || match;
     }

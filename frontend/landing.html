@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     
     <!-- Main stylesheet -->
-    <link rel="stylesheet" href="/static/landing.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
 </head>
 <body>
     <!-- Navigation -->
@@ -26,7 +26,7 @@
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#how-it-works">How it Works</a>
-                <a href="/app" class="cta-button">Launch App</a>
+                <a href="{{ url_for('app_page') }}" class="cta-button">Launch App</a>
             </div>
         </div>
     </nav>
@@ -38,7 +38,7 @@
                 <h1>Manage Tasks Smarter with AI</h1>
                 <p>TaskHive combines intelligent task management with AI assistance to help you stay organized and productive.</p>
                 <div class="hero-buttons">
-                    <a href="/app" class="cta-button primary">
+                    <a href="{{ url_for('app_page') }}" class="cta-button primary">
                         <span class="button-content">
                             <span class="button-text">Get Started</span>
                             <i class="fas fa-arrow-right"></i>
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="../static/images/hero-illustration.svg" alt="TaskHive Interface Illustration">
+                <img src="{{ url_for('static', filename='images/hero-illustration.svg') }}" alt="TaskHive Interface Illustration">
             </div>
         </div>
     </section>
@@ -182,13 +182,13 @@
                 <div class="testimonial-card">
                     <div class="testimonial-content">
                         <i class="fas fa-quote-left quote-icon"></i>
-                        <p>"TaskHive's AI assistant has transformed how I manage my projects. The smart organization features are game-changing."</p>
+                        <p>"TaskHive's AI assistant has transformed how I manage my projects. The smart organization features are game-changing. As a software engineer, I appreciate how it streamlines my daily workflow and helps me focus on coding rather than task management."</p>
                     </div>
                     <div class="testimonial-author">
-                        <img src="../static/images/alexis.svg" alt="Alexis Liew" class="author-image">
+                        <img src="{{ url_for('static', filename='images/alexis.svg') }}" alt="Alexis Liew" class="author-image">
                         <div class="author-info">
                             <h4>Alexis Liew</h4>
-                            <p>Software Engineer</p>
+                            <p>Senior Software Engineer at TechCorp</p>
                         </div>
                     </div>
                 </div>
@@ -196,13 +196,13 @@
                 <div class="testimonial-card">
                     <div class="testimonial-content">
                         <i class="fas fa-quote-left quote-icon"></i>
-                        <p>"The progress tracking and time management features have helped our team stay focused and productive."</p>
+                        <p>"The progress tracking and time management features have helped our team stay focused and productive. We've seen a 40% increase in project completion rates since implementing TaskHive. It's become an essential tool for our project management workflow."</p>
                     </div>
                     <div class="testimonial-author">
-                        <img src="../static/images/bryan.svg" alt="Bryan Hancock" class="author-image">
+                        <img src="{{ url_for('static', filename='images/bryan.svg') }}" alt="Bryan Hancock" class="author-image">
                         <div class="author-info">
                             <h4>Bryan Hancock</h4>
-                            <p>Project Manager</p>
+                            <p>Project Manager at InnovateX</p>
                         </div>
                     </div>
                 </div>
@@ -210,20 +210,20 @@
                 <div class="testimonial-card">
                     <div class="testimonial-content">
                         <i class="fas fa-quote-left quote-icon"></i>
-                        <p>"TaskHive's calendar integration and activity tracking have streamlined our workflow significantly."</p>
+                        <p>"TaskHive's calendar integration and activity tracking have streamlined our workflow significantly. As a technical lead, I can easily monitor team progress and identify bottlenecks before they become issues. The AI suggestions for task prioritization are surprisingly accurate."</p>
                     </div>
                     <div class="testimonial-author">
-                        <img src="../static/images/drew.svg" alt="Drew Houchens" class="author-image">
+                        <img src="{{ url_for('static', filename='images/drew.svg') }}" alt="Drew Houchens" class="author-image">
                         <div class="author-info">
                             <h4>Drew Houchens</h4>
-                            <p>Technical Lead</p>
+                            <p>Technical Lead at CloudScale</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="join-community">
-                <a href="/app" class="join-button">
+                <a href="{{ url_for('app_page') }}" class="join-button">
                     <span class="button-content">
                         <i class="fas fa-rocket"></i>
                         <span class="button-text">Join Our Community</span>
@@ -344,4 +344,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

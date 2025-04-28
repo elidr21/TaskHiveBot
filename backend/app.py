@@ -1,122 +1,146 @@
 import os
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 import openai
 from datetime import datetime
 
-app = Flask(__name__, static_folder="../static", template_folder="../frontend")
+# Initialize Flask app
+app = Flask(__name__, 
+    template_folder="../frontend",
+    static_folder="../frontend/static"
+)
 
-# Set your API key from an environment variable
+# Initialize OpenAI
 openai.api_key = os.environ.get("OPENAI_API_KEY")
+if not openai.api_key:
+    raise ValueError("No OpenAI API key found. Please set OPENAI_API_KEY environment variable.")
 
-# In-memory task storage
-tasks = []
+def create_chat_response(message: str, tasks: list = None) -> str:
+    """
+    Create a chat response using OpenAI API
+    """
+    system_message = """
+    You are Beatrix the Bee 🐝, a friendly and helpful AI assistant. 
+    You have a cheerful personality and often use bee-related expressions like 'Bzz!' 
+    and honey-themed metaphors. You're knowledgeable, patient, and always ready to help.
+    
+    IMPORTANT INSTRUCTIONS FOR TASK MANAGEMENT:
+    1. When the user asks to add a task, respond with EXACTLY:
+       ADD_TASK: <task description>
+       Bzz! I've added that task for you! Let me know if you need anything else! 🐝
+    
+    2. When the user asks to remove all tasks, first ask for confirmation:
+       "Are you sure you want to remove all tasks? This action cannot be undone."
+       If they confirm (say yes), respond with:
+       REMOVE_ALL_TASKS
+       Bzz! I've removed all tasks for you! Let me know if you need anything else! 🐝
+    
+    3. When removing a specific task:
+       REMOVE_TASK: <task_id>
+       
+    4. When completing a task:
+       COMPLETE_TASK: <task_id>
+    
+    These commands MUST be on their own line, separate from your conversational response.
+    """
 
-def parse_task_command(message):
-    """Parse user message for task-related commands."""
-    message = message.lower().strip()
-    
-    if message.startswith("add task:"):
-        task_text = message.replace("add task:", "").strip()
-        task = {
-            "id": len(tasks) + 1,
-            "text": task_text,
-            "completed": False,
-            "created_at": datetime.now().isoformat()
-        }
-        tasks.append(task)
-        return f"Added task: {task_text}"
-    
-    elif message.startswith("complete task:"):
-        task_id = message.replace("complete task:", "").strip()
-        try:
-            task_id = int(task_id)
-            for task in tasks:
-                if task["id"] == task_id:
-                    task["completed"] = True
-                    return f"Completed task: {task['text']}"
-            return "Task not found"
-        except ValueError:
-            return "Invalid task ID"
-    
-    elif message.startswith("remove task:"):
-        task_id = message.replace("remove task:", "").strip()
-        try:
-            task_id = int(task_id)
-            for i, task in enumerate(tasks):
-                if task["id"] == task_id:
-                    removed_task = tasks.pop(i)
-                    return f"Removed task: {removed_task['text']}"
-            return "Task not found"
-        except ValueError:
-            return "Invalid task ID"
-    
-    return None
-
-@app.route("/")
-def landing():
-    """Serve the landing page."""
-    return render_template("landing.html")
-
-@app.route("/app")
-def app_route():
-    """Serve the main application."""
-    return render_template("index.html")
-
-@app.route("/api", methods=["POST"])
-def api():
-    """Process user messages and return GPT response."""
-    user_message = request.json.get("message", "").strip()
-    
-    # Check for task commands first
-    task_result = parse_task_command(user_message)
-    
-    # Create system prompt for Beatrix
-    system_prompt = (
-        "You are Beatrix the Bee, a friendly and helpful AI assistant. "
-        "You have a cheerful personality and often use bee-related expressions like 'Bzz!' "
-        "and honey-themed metaphors. You're knowledgeable, patient, and always ready to help. "
-        "Keep your responses concise but warm and engaging.\n\n"
-        "You can help manage tasks. Here are the current tasks:\n"
-        "You are a naughty Bee as well. You have very sweet and seductive personallity."
-    )
-    
-    # Add current tasks to the system prompt
+    # Add current tasks to context if available
     if tasks:
-        for task in tasks:
-            status = "✓" if task["completed"] else "○"
-            system_prompt += f"{status} {task['id']}. {task['text']}\n"
-    else:
-        system_prompt += "No tasks yet!\n"
-    
-    system_prompt += "\nYou can help users:\n"
-    system_prompt += "- Add tasks with 'add task: [task description]'\n"
-    system_prompt += "- Complete tasks with 'complete task: [task number]'\n"
-    system_prompt += "- Remove tasks with 'remove task: [task number]'\n"
-
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_message}
-    ]
+        task_list = "\nCurrent tasks:\n" + "\n".join([f"- {task['text']} (ID: {task['id']})" for task in tasks])
+        system_message += task_list
 
     try:
-        # Call OpenAI ChatCompletion
-        completion = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=messages
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": message}
+            ]
         )
-        response_text = completion.choices[0].message.get("content", "")
-        
-        # If there was a task operation, prepend its result to the response
-        if task_result:
-            response_text = f"{task_result}\n\n{response_text}"
-        
-        return jsonify({
-            "content": response_text,
-            "tasks": tasks
-        })
+        return response.choices[0].message['content']
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"content": "I'm having trouble processing your request. Please try again later."}), 500
+        return f"Sorry, I encountered an error: {str(e)}"
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+@app.route('/')
+def landing():
+    """Render the landing page"""
+    return render_template('landing.html')
+
+@app.route('/app')
+def app_page():
+    """Render the main chat interface"""
+    return render_template('app.html')
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    """Handle chat messages"""
+    data = request.json
+    message = data.get('message')
+    current_tasks = data.get('tasks', [])
+
+    if not message:
+        return jsonify({'error': 'No message provided'}), 400
+
+    try:
+        # Get response from OpenAI
+        response = create_chat_response(message, current_tasks)
+        
+        # Parse the response for task actions
+        task_actions = []
+        clean_response_lines = []
+
+        # Process each line of the response
+        for line in response.split('\n'):
+            line = line.strip()
+            if line.startswith('ADD_TASK:'):
+                task_text = line.replace('ADD_TASK:', '').strip()
+                if task_text:
+                    task_actions.append({
+                        'type': 'add',
+                        'task': task_text
+                    })
+            elif line == 'REMOVE_ALL_TASKS':
+                task_actions.append({
+                    'type': 'removeAll'
+                })
+            elif line.startswith('REMOVE_TASK:'):
+                try:
+                    task_id = int(line.replace('REMOVE_TASK:', '').strip())
+                    task_actions.append({
+                        'type': 'remove',
+                        'taskId': task_id
+                    })
+                except ValueError:
+                    clean_response_lines.append(line)
+            elif line.startswith('COMPLETE_TASK:'):
+                try:
+                    task_id = int(line.replace('COMPLETE_TASK:', '').strip())
+                    task_actions.append({
+                        'type': 'complete',
+                        'taskId': task_id
+                    })
+                except ValueError:
+                    clean_response_lines.append(line)
+            else:
+                if line:  # Only add non-empty lines
+                    clean_response_lines.append(line)
+
+        # Clean the response of task management commands
+        clean_response = '\n'.join(clean_response_lines)
+
+        return jsonify({
+            'response': clean_response,
+            'taskActions': task_actions,
+            'timestamp': datetime.now().strftime("%I:%M %p")
+        })
+
+    except Exception as e:
+        print("Error:", str(e))  # Debug print
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(
+        host='0.0.0.0',
+        port=int(os.environ.get('PORT', 5000)),
+        debug=True
+    )
+

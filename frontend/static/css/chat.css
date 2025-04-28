@@ -1,0 +1,325 @@
+:root {
+    --primary-color: #FFC107;
+    --primary-dark: #FFA000;
+    --bg-color: #f9f9f9;
+    --text-color: #333;
+    --border-color: #eee;
+    --card-bg: #fff;
+    --hover-bg: #f5f5f5;
+    --success-color: #4CAF50;
+    --warning-color: #FF9800;
+    --danger-color: #F44336;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --sidebar-width: 300px;
+    --header-height: 60px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+.app-layout {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar Styles */
+.task-sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    height: var(--header-height);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--primary-color);
+    color: var(--text-color);
+}
+
+.sidebar-header h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.close-sidebar {
+    display: none; /* Hidden on desktop */
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
+.chat-header {
+    height: var(--header-height);
+    padding: 0 20px;
+    background: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+}
+
+.toggle-sidebar {
+    display: none; /* Hidden on desktop */
+}
+
+/* Task List Styles */
+.task-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.task-item {
+    background: var(--bg-color);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease;
+}
+
+.task-item:hover {
+    transform: translateX(5px);
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-checkbox.checked {
+    background: var(--primary-color);
+    color: white;
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-text {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.delete-task {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.delete-task:hover {
+    opacity: 1;
+}
+
+/* Task Input */
+.task-input-container {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.task-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.add-task-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.add-task-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Chat Messages */
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    line-height: 1.4;
+}
+
+.user-message {
+    background: var(--primary-color);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.ai-message {
+    background: var(--bg-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.system-message {
+    background: #fff3cd;
+    color: #856404;
+    align-self: center;
+    text-align: center;
+}
+
+/* Chat Input */
+.chat-input {
+    padding: 20px;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+}
+
+.send-button {
+    padding: 12px 24px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.send-button:hover {
+    background: var(--primary-dark);
+}
+
+/* Task Filters */
+.task-filters {
+    display: flex;
+    padding: 15px;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: var(--bg-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .task-sidebar {
+        position: fixed;
+        left: -100%;
+        z-index: 1000;
+        width: 85%;
+        max-width: var(--sidebar-width);
+    }
+
+    .task-sidebar.active {
+        left: 0;
+    }
+
+    .toggle-sidebar,
+    .close-sidebar {
+        display: block;
+    }
+
+    .chat-container {
+        margin: 0;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.loading span {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: bounce 0.5s infinite alternate;
+}
+
+.loading span:nth-child(2) { animation-delay: 0.2s; }
+.loading span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+    to { transform: translateY(-4px); }
+} 

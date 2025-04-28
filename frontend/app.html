@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskHive Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Task Sidebar -->
+        <aside id="task-sidebar" class="task-sidebar">
+            <div class="sidebar-header">
+                <div class="header-content">
+                    <h2><i class="fas fa-tasks"></i> My Tasks</h2>
+                    <div class="task-stats">
+                        <span id="total-tasks">0 tasks</span>
+                        <span class="stats-divider">•</span>
+                        <span id="completed-tasks">0 completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list"></i>
+                    All
+                </button>
+                <button class="filter-btn" data-filter="active">
+                    <i class="fas fa-clock"></i>
+                    Active
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                    <i class="fas fa-check-circle"></i>
+                    Completed
+                </button>
+            </div>
+
+            <div class="task-input-container">
+                <div class="input-wrapper">
+                    <i class="fas fa-plus"></i>
+                <input 
+                    type="text" 
+                    id="task-input" 
+                    class="task-input" 
+                        placeholder="Add a new task..."
+                    aria-label="New task"
+                />
+                </div>
+                <button id="add-task" class="add-task-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Task
+                </button>
+            </div>
+
+            <div id="task-list" class="task-list"></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="header-content">
+                        <h1>
+                            <i class="fas fa-bee"></i>
+                            TaskHive Assistant
+                        </h1>
+                        <span class="assistant-status">🟢 Online</span>
+                    </div>
+                </div>
+                
+                <div id="chat-messages" class="chat-messages">
+                    <!-- Messages will be added here -->
+                </div>
+                
+                <div class="chat-input">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="user-input" 
+                            placeholder="Type your message..."
+                            aria-label="Chat message"
+                        />
+                        <button id="send-button" class="send-button" aria-label="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

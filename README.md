@@ -1,29 +1,32 @@
-# TaskHiveBot 🐝
+# TaskHiveBot 🐝
 
-> **Smart task management with gamification features — powered by Flask, React, PostgreSQL & Azure OpenAI.**
-
-## ✨ Features
-
-- **Conversational task management** — natural‑language creation, updates & queries
-- **Gamification** — XP, streaks & leaderboards to keep productivity fun
-- **Secure & scalable** — Dockerised micro‑services, PostgreSQL database, JWT auth
-- **Cloud‑ready** — deploys in a single command to Microsoft Azure or any Docker host
+> **Smart task management with gamification features — powered by Flask & OpenAI.**
 
 ---
 
-## ⚡ Quick Start
+## ✨ Features
 
-> **Requirement:** [Docker Desktop ≥ 24.0](https://docs.docker.com/desktop/)
+- 🧠 AI-powered task suggestions and prioritization (OpenAI integration)
+- ✅ To-do list and task tracking with progress visualization
+- 🎮 Gamification system: earn points and rewards for completing tasks
+- 🎨 Clean and responsive frontend interface
+- 🐳 Simple Docker-based setup for seamless deployment
+
+---
+
+## ⚡ Quick Start
+
+> **Requirement:** [Docker Desktop ≥ 24.0](https://docs.docker.com/desktop/)
 
 ```bash
-# 1️⃣ Clone the repository
+# 1️⃣ Clone the repository
 $ git clone https://github.com/elidr/TaskHiveBot.git
 $ cd TaskHiveBot
 
-# 2️⃣ Spin everything up
+# 2️⃣ Spin everything up
 $ docker-compose up --build
 
-# ⏱️ Then visit http://localhost:5000 in your browser.
+# ⏱️ Then visit http://localhost:5000 in your browser.
 ```
 
 The first build can take a minute while images are pulled & dependencies are installed.
@@ -34,17 +37,23 @@ The first build can take a minute while images are pulled & dependencies are ins
 
 ```
 TaskHiveBot/
-├─ backend/            # Flask application
-│  ├─ app/             
-│  ├─ tests/
-│  └─ Dockerfile
-├─ frontend/           # HTML & CSS
-│  ├─ src/
-│  ├─ public/
-│  └─ Dockerfile
-├─ docs/               # Architecture docs & assets
-├─ docker-compose.yml
-└─ README.md
+├── backend/
+│   ├── app.py          # Main Flask application
+│   └── Dockerfile 
+├── frontend/
+│   └── static/
+│       ├── css/        # CSS stylesheets
+│       ├── images/     # Images 
+│       └── js/         # JavaScript files
+│   ├── app.html        # Main app page
+│   └── landing.html    # Landing page
+├── .env                # Environment vars
+├── .gitignore          # Git ignored files and directories
+├── docker-compose.yml  # Multi-container Docker configuration
+├── LICENSE             # Project license (MIT)
+├── README.md
+└── requirements.txt 
+
 ```
 
 ---

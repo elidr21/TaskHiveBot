@@ -8,7 +8,7 @@
 
 - 🧠 AI-powered task suggestions and prioritization (OpenAI integration)
 - ✅ To-do list and task tracking with progress visualization
-- 🎮 Gamification system: earn points and rewards for completing tasks
+- 🎮 Gamification system: earn points and rewards for completing tasks ( In Progress ).
 - 🎨 Clean and responsive frontend interface
 - 🐳 Simple Docker-based setup for seamless deployment
 
@@ -19,7 +19,7 @@
 > **Requirement:** [Docker Desktop ≥ 24.0](https://docs.docker.com/desktop/)
 
 ```bash
-# 1️⃣ Clone the repository
+# 1️⃣ Clone the repository or go to TaskHiveBot Directory on your personal machine
 $ git clone https://github.com/elidr/TaskHiveBot.git
 $ cd TaskHiveBot
 

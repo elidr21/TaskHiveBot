@@ -9,7 +9,7 @@ app = Flask(__name__,
     static_folder="../frontend/static"
 )
 
-# Initialize OpenAI
+# Initializes OpenAI. Note: Place Open AI API key in .env folder. 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 if not openai.api_key:
     raise ValueError("No OpenAI API key found. Please set OPENAI_API_KEY environment variable.")

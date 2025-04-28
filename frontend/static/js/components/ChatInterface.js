@@ -5,6 +5,7 @@ export class ChatInterface {
         this.bindEvents();
         this.addWelcomeMessage();
         this.setupScrollHandling();
+        this.setupScrollButton();
     }
 
     initializeElements() {
@@ -21,6 +22,12 @@ export class ChatInterface {
                 this.userInput.focus();
             });
         });
+
+        // Add scroll button
+        this.scrollButton = document.createElement('button');
+        this.scrollButton.className = 'scroll-to-bottom';
+        this.scrollButton.innerHTML = '↓'; // Down arrow symbol
+        document.body.appendChild(this.scrollButton);
     }
 
     bindEvents() {
@@ -79,6 +86,7 @@ export class ChatInterface {
                         case 'add':
                             const taskId = this.taskManager.addTask(action.task);
                             this.addMessage('system', `✅ Added task: ${action.task}`);
+                            this.forceScrollToBottom();
                             break;
                         case 'removeAll':
                             this.taskManager.removeAllTasks();
@@ -100,6 +108,7 @@ export class ChatInterface {
                             break;
                     }
                 });
+                this.forceScrollToBottom();
             }
 
         } catch (error) {
@@ -121,8 +130,10 @@ export class ChatInterface {
         messageDiv.innerHTML = formattedContent;
         this.chatMessages.appendChild(messageDiv);
 
-        // Scroll to bottom if already near bottom
-        if (this.isNearBottom) {
+        // Always force scroll to bottom for system messages (task updates)
+        if (type === 'system') {
+            this.forceScrollToBottom();
+        } else if (this.isNearBottom) {
             this.scrollToBottom();
         }
     }
@@ -149,7 +160,9 @@ export class ChatInterface {
     }
 
     scrollToBottom() {
-        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        requestAnimationFrame(() => {
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        });
     }
 
     addWelcomeMessage() {
@@ -170,6 +183,9 @@ export class ChatInterface {
         this.observer = new IntersectionObserver(
             (entries) => {
                 this.isNearBottom = entries[0].isIntersecting;
+                if (this.isNearBottom) {
+                    this.scrollButton.classList.remove('visible');
+                }
             },
             {
                 root: this.chatMessages,
@@ -182,5 +198,33 @@ export class ChatInterface {
         this.scrollMarker.style.height = '1px';
         this.chatMessages.appendChild(this.scrollMarker);
         this.observer.observe(this.scrollMarker);
+    }
+
+    setupScrollButton() {
+        // Add click handler for scroll button
+        this.scrollButton.addEventListener('click', () => this.scrollToBottom());
+        
+        // Add scroll listener to show/hide button
+        this.chatMessages.addEventListener('scroll', () => {
+            const distanceFromBottom = 
+                this.chatMessages.scrollHeight - 
+                this.chatMessages.scrollTop - 
+                this.chatMessages.clientHeight;
+            
+            if (distanceFromBottom > 100) {
+                this.scrollButton.classList.add('visible');
+            } else {
+                this.scrollButton.classList.remove('visible');
+            }
+        });
+    }
+
+    forceScrollToBottom() {
+        setTimeout(() => {
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            setTimeout(() => {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }, 100);
+        }, 10);
     }
 } 

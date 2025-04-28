@@ -34,12 +34,6 @@ def create_chat_response(message: str, tasks: list = None) -> str:
        REMOVE_ALL_TASKS
        Bzz! I've removed all tasks for you! Let me know if you need anything else! 🐝
     
-    3. When removing a specific task:
-       REMOVE_TASK: <task_id>
-       
-    4. When completing a task:
-       COMPLETE_TASK: <task_id>
-    
     These commands MUST be on their own line, separate from your conversational response.
     """
 

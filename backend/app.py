@@ -16,7 +16,7 @@ if not openai.api_key:
 
 def create_chat_response(message: str, tasks: list = None) -> str:
     """
-    Create a chat response using OpenAI API
+    Creates a chat response using the OpenAI API Key
     """
     system_message = """
     You are Beatrix the Bee, a friendly and helpful AI assistant. 
@@ -33,6 +33,8 @@ def create_chat_response(message: str, tasks: list = None) -> str:
        If they confirm (say yes), respond with:
        REMOVE_ALL_TASKS
        Bzz! I've removed all tasks for you!
+    
+    3. Please uphold all ETHICAL values. 
     
     These commands MUST be on their own line, separate from your conversational response.
     """

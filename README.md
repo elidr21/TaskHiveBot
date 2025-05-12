@@ -164,4 +164,4 @@ For support, please open an issue in the GitHub repository.
 
 ---
 
-> © 2025 Elizandro Duran, Drew Houchens, Bryan Hancock, Alexis Liew — *Made in Colorado Springs*
+> © 2025 
